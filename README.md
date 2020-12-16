@@ -1,2 +1,5 @@
 # IDLE-SuperMarket
-Just my Bot's repo
+
+****
+
+Just* my Bot's repo
