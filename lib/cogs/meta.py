@@ -129,15 +129,18 @@ class Meta(Cog):
 	@has_permissions(manage_guild=True)
 	@guild_only()
 	async def change_prefix(self, ctx, *, prefix: str = None):
+		prev_prefix = db.field("SELECT prefix FROM Guild_Settings WHERE guild_id = ?", ctx.guild.id)
+
 		if prefix is None:
-			await ctx.send("You can use this command to change my prefix\n"
+			await ctx.send(f"**The current prefix in this server is `{prev_prefix}`**\n\n"
+			               "You can use this command to change my prefix\n"
 			               "**__Note__: You can only have a prefix length of 5 characters and it should not contain spaces**")
 		elif " " in prefix:
 			await ctx.send(":x:\nYou Can't have a space between.")
 		elif len(prefix) > 5:
 			await ctx.send(":x:\nPlease change the prefix as it can't be more than 5 characters.")
 		else:
-			await db.execute("UPDATE Guild_Settings SET prefix = ? WHERE guild_id = ?", prefix, ctx.guild.id)
+			db.execute("UPDATE Guild_Settings SET prefix = ? WHERE guild_id = ?", prefix, ctx.guild.id)
 			await ctx.send(f"**Changed prefix to `{prefix}` successfully!**")
 
 	@change_prefix.error
