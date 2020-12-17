@@ -37,16 +37,17 @@ class Help(Cog):
 
 	@group(name="help", description="The one command where you can see all the commands", invoke_without_command=True)
 	async def help_command(self, ctx, icmd: str = None):
-		prefix = ctx.prefix
+		prefix = db.field('SELECT prefix FROM Guild_Settings WHERE guild_id = ?', ctx.guild.id)
 
 		if icmd is None:
 			e = Embed(title="**These are the command categories**",
-			          description=f"To change my prefix use `{prefix}prefix <prefix>`\n\n")
+			          description=f"    - My prefix in server **{ctx.guild.name}** is `{prefix}`\n"
+			                      f"    - To change my prefix use `{prefix}prefix <new_prefix>`\n\n")
 
 			fields = [
-				("General", f"General commands!) \n`{ctx.prefix}help general`", True),
-				("Gameplay", f"Gameplay commands! \n`{ctx.prefix}help gameplay`", True),
-				('Misc', f'Misc Commands! \n`{ctx.prefix}help misc`', True)
+				("General", f"General commands!) \n`{prefix}help general`", True),
+				("Gameplay", f"Gameplay commands! \n`{prefix}help gameplay`", True),
+				('Misc', f'Misc Commands! \n`{prefix}help misc`', True)
 			]
 
 			for name, value, inline in fields:
@@ -68,7 +69,9 @@ class Help(Cog):
 							e.add_field(name="aliases", value=",".join([f'`{alias}`' for alias in aliases]))
 						if cmd.brief is not None:
 							e.add_field(name='Usage',
-							            value=cmd.brief.format(ctx.prefix) if len(cmd.brief.split(',')) == 1 else '\n'.join(cmd.brief.format(ctx.prefix).split('******')))
+							            value=cmd.brief.format(ctx.prefix) if len(
+								            cmd.brief.split(',')) == 1 else '\n'.join(
+								            cmd.brief.format(prefix).split('******')))
 
 						await ctx.send(embed=e)
 						return

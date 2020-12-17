@@ -35,10 +35,11 @@ def get_prefix(bot=None, message=None):
 			if member.id == message.author.id:
 				prefix = db.field("SELECT prefix FROM Guild_Settings WHERE guild_id = ?", member.guild.id)
 				if message.content.startswith(prefix):
-					return prefix
+					return when_mentioned_or(prefix)(bot, message)
 				else: continue
 	else:
-		return db.field("SELECT prefix FROM Guild_Settings WHERE guild_id = ?", message.guild.id)
+		return when_mentioned_or(db.field("SELECT prefix FROM Guild_Settings WHERE guild_id = ?", message.guild.id))(
+			bot, message)
 
 
 class Ready(object):
