@@ -6,8 +6,8 @@ from contextlib import contextmanager
 from apscheduler.triggers.cron import CronTrigger
 
 DB_PATH = "./data/db/database.db"
-BOT_SETTINGS_PATH = "./data/db/bot_settings.json"
-BUILD_PATH = "./data/db/build.sql"
+BOT_SETTINGS_PATH = "./data/bot_config/bot_settings.json"
+BUILD_PATH = "./lib/db/build.sql"
 con = connect(DB_PATH)
 
 

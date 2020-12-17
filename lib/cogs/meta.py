@@ -15,7 +15,7 @@ from psutil import Process, virtual_memory
 
 # Imports of Self-Made Libraries
 from utils.checks import guild_only
-from ..db import db
+from lib.db import db
 
 
 # Imports of Downloaded Libraries
@@ -138,7 +138,11 @@ class Meta(Cog):
 		elif " " in prefix:
 			await ctx.send(":x:\nYou Can't have a space between.")
 		elif len(prefix) > 5:
-			await ctx.send(":x:\nPlease change the prefix as it can't be more than 5 characters.")
+			await ctx.send(
+				":x:\nDon't keep your prefix bigger then 5 characters it will be hard for noobs to type(jk).\n"
+				"||It|||| ||||is|||| ||||so|||| ||||you|||| ||||don't|||| ||||flood|||| ||||my|||| ||||disc|||| ||||space||||:stuck_out_tongue_winking_eye:||")
+		elif prev_prefix == prefix:
+			await ctx.send("Why?")
 		else:
 			db.execute("UPDATE Guild_Settings SET prefix = ? WHERE guild_id = ?", prefix, ctx.guild.id)
 			await ctx.send(f"**Changed prefix to `{prefix}` successfully!**")
